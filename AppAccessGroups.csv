@@ -1,4 +1,4 @@
-#Specify name of authorized AD-groups.
+#Specify name of authorized AD-group.
 App;GroupName
 UserAccOps;AD_APP_ROLE_GROUP
 
