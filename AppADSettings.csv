@@ -1,0 +1,25 @@
+# Date stamps in account description must be 8 digits in format yyyymmdd. AttributeClearOnDisable/Enable allows multiple comma-separated values.
+Type;Value
+DomainController;DC01.local
+DomainName;Domain.internal
+LogPath;C:\logs
+UserAccounts;OU=UserAccounts,DC=domain,DC=internal
+AdminAccounts;OU=AdminAccounts,DC=domain,DC=internal
+ResourceAccounts;OU=Resources,DC=domain,DC=internal
+DisabledUserAccounts;OU=DisabledUserAccounts,DC=domain,DC=internal
+DisabledAdminAccounts;OU=DisabledAdminAccounts,DC=domain,DC=internal
+DisabledResourceAccounts;OU=DisabledResources,DC=domain,DC=internal
+OutputPath;C:\output
+ConfigPath;C:\config
+DisableStamp;Disabled [DISABLEDATE]
+InactiveStamp;Disabled [DISABLEDATE] (Inactivity for [INACTIVEDAYS] days)
+AttributeClearOnDisable;
+AttributeClearOnEnable;
+AccEnable2ndBatchOutput;INPUT_RecMB.txt
+AccPWReset2ndBatchOutput;
+AccUnlock2ndBatchOutput;
+AccSetDate2ndBatchOutput;
+AccClearDate2ndBatchOutput;
+AccEnfPWChange2ndBatchOutput;
+AccDisable2ndBatchOutput;
+AccDelete2ndBatchOutput;
