@@ -15,7 +15,7 @@ DisableStamp;Disabled [DISABLEDATE]
 InactiveStamp;Disabled [DISABLEDATE] (Inactivity for [INACTIVEDAYS] days)
 AttributeClearOnDisable;
 AttributeClearOnEnable;
-AccEnable2ndBatchOutput;INPUT_RecMB.txt
+AccEnable2ndBatchOutput;
 AccPWReset2ndBatchOutput;
 AccUnlock2ndBatchOutput;
 AccSetDate2ndBatchOutput;
