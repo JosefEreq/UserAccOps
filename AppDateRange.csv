@@ -1,0 +1,4 @@
+#Specify addition of days with numbers only. Specify subtraction of days with "-" before the number. (Minimum date for AD-account expiration is hard-coded to todays date.)
+Name;Days
+MaxDateAccountExp;1825
+
