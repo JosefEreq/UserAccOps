@@ -87,8 +87,8 @@ import-module activedirectory
 
     ## - Create a array for the encryption key for when encrypting the password.
     $aes = New-Object "System.Security.Cryptography.AesManaged"
-    $aes.IV = (REMOVED FROM SCRIPT DOCUMENT)
-    $aes.key = (REMOVED FROM SCRIPT DOCUMENT)
+    $aes.IV = ""
+    $aes.key = ""
 
     ## - Specify varaible for importing accepted input-date ranges.
     $DateRange = (import-csv (join-path $GlobalData "AppDateRange.csv") -Delimiter ";")
