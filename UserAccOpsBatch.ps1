@@ -16,8 +16,8 @@ Version 1.2
 
 # - Create a array for the encryption key for when encrypting the password.
 $aes = New-Object "System.Security.Cryptography.AesManaged"
-$aes.IV = (REMOVED FROM SCRIPT DOCUMENT)
-$aes.key = (REMOVED FROM SCRIPT DOCUMENT)
+$aes.IV = ""
+$aes.key = ""
 
 
 # - Specify the directory path for the settings-file.
@@ -53,8 +53,7 @@ $AccDisable2ndBatch = ((import-csv $ConfigPath -Delimiter ";" | where {$_.type -
 $AccDelete2ndBatch = ((import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "AccDelete2ndBatchOutput"}).value)
 
 # - Create a credential object for the service account that performs the account operations.
-$secpasswd = ConvertTo-SecureString "Service account password" -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential ("AD service account(Account operator or delegetade permissions)", $secpasswd)
+$cred = Import-CliXml -Path "upn+hash.cred"
 
 # - Load todays date into  variable, in the specified format. It will be as for time-stamping disabled accounts.
 $Date = get-date -Format yyyyMMdd
