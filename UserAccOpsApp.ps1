@@ -75,6 +75,12 @@ import-module activedirectory
     $InactivityStampRegEx = $InactivityStampRegEx -replace "DISABLEDATE","(\d){8}"
     $InactivityStampRegEx = $InactivityStampRegEx -replace "INACTIVEDAYS","(\d)+"
 
+    # - Create a AES object and specify path to the hashed AES encryption key and IV files. Must be the same as in the app-script. 
+    $aes = New-Object "System.Security.Cryptography.AesManaged"
+    $aes.IV = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashOutputKeyIVPath"}).value
+    $aes.key = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashOutputKeyPath"}).value
+
+
     ## - Specify the name of the authorized AD-group. The group members will be authorized to perform application presented operations.
     $Rolename = (import-csv (join-path $GlobalData "AppAccessGroups.csv") -Delimiter ";" | where {$_.App -eq "UserAccOps"}).GroupName
 
@@ -83,11 +89,6 @@ import-module activedirectory
 
     ## - Specify the name of the authorized fallback AD-user. Its user will be authorized to perform application presented operations, in fail-over situations.
     $FallBackUsr = (import-csv (join-path $GlobalData "AppAccessFallback.csv") -Delimiter ";" | where {$_.Type -eq "User"}).Name
-
-
-    ## - Create a array for the encryption key for when encrypting the password.    
-    $aes.IV = Import-CliXml -Path "outputIV.cred"
-    $aes.key = Import-CliXml -Path "outputkey.cred"
 
     ## - Specify varaible for importing accepted input-date ranges.
     $DateRange = (import-csv (join-path $GlobalData "AppDateRange.csv") -Delimiter ";")
