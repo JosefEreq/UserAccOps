@@ -5,10 +5,8 @@ DomainName;Domain.internal
 LogPath;C:\logs
 UserAccounts;OU=UserAccounts,DC=domain,DC=internal
 AdminAccounts;OU=AdminAccounts,DC=domain,DC=internal
-ResourceAccounts;OU=Resources,DC=domain,DC=internal
 DisabledUserAccounts;OU=DisabledUserAccounts,DC=domain,DC=internal
 DisabledAdminAccounts;OU=DisabledAdminAccounts,DC=domain,DC=internal
-DisabledResourceAccounts;OU=DisabledResources,DC=domain,DC=internal
 OutputPath;C:\output
 ConfigPath;C:\config
 DisableStamp;Disabled [DISABLEDATE]
