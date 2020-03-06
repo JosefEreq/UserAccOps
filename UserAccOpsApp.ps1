@@ -85,10 +85,9 @@ import-module activedirectory
     $FallBackUsr = (import-csv (join-path $GlobalData "AppAccessFallback.csv") -Delimiter ";" | where {$_.Type -eq "User"}).Name
 
 
-    ## - Create a array for the encryption key for when encrypting the password.
-    $aes = New-Object "System.Security.Cryptography.AesManaged"
-    $aes.IV = ""
-    $aes.key = ""
+    ## - Create a array for the encryption key for when encrypting the password.    
+    $aes.IV = Import-CliXml -Path "outputIV.cred"
+    $aes.key = Import-CliXml -Path "outputkey.cred"
 
     ## - Specify varaible for importing accepted input-date ranges.
     $DateRange = (import-csv (join-path $GlobalData "AppDateRange.csv") -Delimiter ";")
