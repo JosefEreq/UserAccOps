@@ -15,8 +15,8 @@ Version 1.2
 #>
 
 # - Specify path to the hashed AES encryption key and IV files. 
-$aes.IV = Import-CliXml -Path "outputkeyIVhash.cred"
-$aes.key = Import-CliXml -Path  "Outputkeyhash.cred"
+$aes.IV = Import-CliXml -Path "outputkeyIVhash.aeshash"
+$aes.key = Import-CliXml -Path  "Outputkeyhash.aeshash"
 
 
 # - Specify the directory path for the settings-file.
