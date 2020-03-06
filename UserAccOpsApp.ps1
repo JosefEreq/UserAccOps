@@ -75,7 +75,7 @@ import-module activedirectory
     $InactivityStampRegEx = $InactivityStampRegEx -replace "DISABLEDATE","(\d){8}"
     $InactivityStampRegEx = $InactivityStampRegEx -replace "INACTIVEDAYS","(\d)+"
 
-    # - Create a AES object and specify path to the hashed AES encryption key and IV files. Must be the same as in the app-script. 
+    # - Create a AES object and specify path to the hashed AES encryption key and IV files. Must be the same as in the back-end script. 
     $aes = New-Object "System.Security.Cryptography.AesManaged"
     $aes.IV = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashOutputKeyIVPath"}).value
     $aes.key = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashOutputKeyPath"}).value
