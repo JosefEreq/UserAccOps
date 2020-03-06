@@ -18,7 +18,6 @@ Version 1.2
 $aes.IV = Import-CliXml -Path "outputkeyIVhash.aeshash"
 $aes.key = Import-CliXml -Path  "Outputkeyhash.aeshash"
 
-
 # - Specify the directory path for the settings-file.
 $ConfigPath = ".\AppADSettings.csv"
 
