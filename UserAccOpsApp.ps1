@@ -80,7 +80,6 @@ import-module activedirectory
     $aes.IV = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashOutputKeyIVPath"}).value
     $aes.key = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashOutputKeyPath"}).value
 
-
     ## - Specify the name of the authorized AD-group. The group members will be authorized to perform application presented operations.
     $Rolename = (import-csv (join-path $GlobalData "AppAccessGroups.csv") -Delimiter ";" | where {$_.App -eq "UserAccOps"}).GroupName
 
