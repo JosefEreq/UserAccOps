@@ -23,6 +23,9 @@ $aes = New-Object "System.Security.Cryptography.AesManaged"
 $aes.IV = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashOutputKeyIVPath"}).value
 $aes.key = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashOutputKeyPath"}).value
 
+# - Create a credential object for the service account that performs the account operations.
+$cred = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashCredPath"}).value
+
 # - Specify the directory path for the log file.
 $LogPath = (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "LogPath"}).value
 
@@ -51,9 +54,6 @@ $AccClearDate2ndBatch = ((import-csv $ConfigPath -Delimiter ";" | where {$_.type
 $AccEnfPWChange2ndBatch = ((import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "AccEnfPWChange2ndBatchOutput"}).value)
 $AccDisable2ndBatch = ((import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "AccDisable2ndBatchOutput"}).value)
 $AccDelete2ndBatch = ((import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "AccDelete2ndBatchOutput"}).value)
-
-# - Create a credential object for the service account that performs the account operations.
-$cred = Import-CliXml -Path "upn+hash.cred"
 
 # - Load todays date into  variable, in the specified format. It will be as for time-stamping disabled accounts.
 $Date = get-date -Format yyyyMMdd
