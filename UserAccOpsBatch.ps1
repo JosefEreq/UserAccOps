@@ -4,7 +4,6 @@
 
 This script performs accounts operations based on input files.
 It picks up the input-file from the UserAccOpsApp.
-Set encryption key below and in UserAccOpsApp.
 
 Author 
 Josef Ereq
