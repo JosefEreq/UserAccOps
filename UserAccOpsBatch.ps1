@@ -14,12 +14,14 @@ Version 1.2
 
 #>
 
-# - Specify path to the hashed AES encryption key and IV files. 
-$aes.IV = Import-CliXml -Path "outputkeyIVhash.aeshash"
-$aes.key = Import-CliXml -Path  "Outputkeyhash.aeshash"
 
 # - Specify the directory path for the settings-file.
 $ConfigPath = ".\AppADSettings.csv"
+
+# - Create a AES object and specify path to the hashed AES encryption key and IV files. Must be the same as in the back-end script. 
+$aes = New-Object "System.Security.Cryptography.AesManaged"
+$aes.IV = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashOutputKeyIVPath"}).value
+$aes.key = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashOutputKeyPath"}).value
 
 # - Specify the directory path for the log file.
 $LogPath = (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "LogPath"}).value
