@@ -4,7 +4,6 @@
 
 This script builds a control panel for account operations.
 It writes input-files to scripts UserAccOpsBatch that performs the operations.
-Set encryption key below and in UserAccOpsBatch. 
 
 
 Author 
