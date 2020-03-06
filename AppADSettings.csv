@@ -23,3 +23,5 @@ AccClearDate2ndBatchOutput;
 AccEnfPWChange2ndBatchOutput;
 AccDisable2ndBatchOutput;
 AccDelete2ndBatchOutput;
+HashOutputKeyIVPath;
+HashOutputKeyPath;
