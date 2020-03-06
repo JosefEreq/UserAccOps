@@ -14,10 +14,9 @@ Version 1.2
 
 #>
 
-# - Create a array for the encryption key for when encrypting the password.
-$aes = New-Object "System.Security.Cryptography.AesManaged"
-$aes.IV = ""
-$aes.key = ""
+# - Specify path to the hashed AES encryption key and IV files. 
+$aes.IV = Import-CliXml -Path "outputkeyIVhash.cred"
+$aes.key = Import-CliXml -Path  "Outputkeyhash.cred"
 
 
 # - Specify the directory path for the settings-file.
