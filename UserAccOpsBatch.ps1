@@ -23,7 +23,7 @@ $aes.IV = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type 
 $aes.key = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashOutputKeyPath"}).value
 
 # - Create a credential object for the service account that performs the account operations.
-$cred = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashCredPath"}).value
+$cred = Import-CliXml (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "HashServiceAccPath"}).value
 
 # - Specify the directory path for the log file.
 $LogPath = (import-csv $ConfigPath -Delimiter ";" | where {$_.type -eq "LogPath"}).value
