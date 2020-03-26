@@ -92,7 +92,6 @@ import-module activedirectory
     $DateRange = (import-csv (join-path $GlobalData "AppDateRange.csv") -Delimiter ";")
 
     ## - Set the path to the output-files in variables. These files will be picked up and executed by the back-end script.
-    	USE THE ONE UNIVERSAL BACK-END SCRIPT FROM DOWNLOAD - OR SPLIT IT UPP IF YOU WISH
         
         ### - The output-file for the password-reset back-end script.
         $InputFilePWRes = (join-path $ScriptData "INPUT_UserAccPWReset.txt")
