@@ -109,34 +109,13 @@ Function AccDelete()
             $usr = $null
             $Usr = ($Entry -split "&&&")[0]
 
-            # - Get the executing user-part in the loaded string.
-            $RunningUsr = $null
-            $RunningUsr = ($Entry -split "&&&")[1] 
-        
-            # - Get the time executed-part in the loaded string.
-            $ExecTime = $null
-            $ExecTime = ($Entry -split "&&&")[2] 
+            # - Load the AD-user object into variable.
+            $ADusr = $null
+            $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
 
-            # - Load the AD-user of the running user.
-            $RunningADUsr = $null
-            $RunningADUsr = get-aduser -server $server -filter {userprincipalname -eq $RunningUsr}
+            # - Delete the AD-user.
+            $ADUsr | Remove-ADUser -server $server -confirm:$false -Credential $Cred
 
-            # - Load the date of the input time-stamp into a variable.
-            $RealExecTime = $null
-            $RealExecTime = get-date $ExecTime
-        
-            # - Test that the running user exists and timestamp is valid. If so, run the script block.
-            If($RunningADUsr -and $RealExecTime)
-                {
-                # - Load the AD-user object into variable.
-                $ADusr = $null
-                $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
-
-
-                # - Delete the AD-user.
-                $ADUsr | Remove-ADUser -server $server -confirm:$false -Credential $Cred
-
-                }
             }
             if($AccDelete2ndBatch)
                 {
@@ -185,46 +164,26 @@ Function AccDisable()
             # - Get the user name-part in the loaded string.
             $usr = $null
             $Usr = ($Entry -split "&&&")[0]
+            
+            # - Load the AD-user object into variable.
+            $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
 
-            # - Get the executing user-part in the loaded string.
-            $RunningUsr = $null
-            $RunningUsr = ($Entry -split "&&&")[1] 
+            # - Disable the user account.
+            $ADUsr | Disable-ADAccount -Server $server -Credential $Cred
 
-            # - Get the time executed-part in the loaded string.
-            $ExecTime = $null
-            $ExecTime = ($Entry -split "&&&")[2] 
-        
-            # - Load the AD-user of the running user.
-            $RunningADUsr = $null
-            $RunningADUsr = get-aduser -server $server -filter {userprincipalname -eq $RunningUsr}
+            # - Append the disabling stamp on the user description.
+            $ADUsr | Set-ADUser -server $server -Description "$DabStampForm" -Credential $Cred
 
-            # - Load the date of the input time-stamp into a variable.
-            $RealExecTime = $null
-            $RealExecTime = get-date $ExecTime
-        
-            # - Test that the running user exists and timestamp is valid. If so, run the script block.
-            If($RunningADUsr -and $RealExecTime)
+            # - Loop trough each entry of attributes to clear when disabling a user, and clear that attribute.
+            foreach($AttributeClear in $AttributeClearOnDisable)
                 {
-        
-                # - Load the AD-user object into variable.
-                $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
-
-                # - Disable the user account.
-                $ADUsr | Disable-ADAccount -Server $server -Credential $Cred
-
-                # - Append the disabling stamp on the user description.
-                $ADUsr | Set-ADUser -server $server -Description "$DabStampForm" -Credential $Cred
-                
-                # - Loop trough each entry of attributes to clear when disabling a user, and clear that attribute.
-                foreach($AttributeClear in $AttributeClearOnDisable)
-                    {
-                    $ADUsr | Set-ADUser -Server $Server -clear $AttributeClear -Credential $Cred
-                    }
-                
-                # - Move the user acount to the OU for disabled user accounts.
-                $ADUsr | Move-ADObject -Server $Server -TargetPath $OUDisabledUserAccounts -Credential $Cred
-
+                $ADUsr | Set-ADUser -Server $Server -clear $AttributeClear -Credential $Cred
                 }
+
+            # - Move the user acount to the OU for disabled user accounts.
+            $ADUsr | Move-ADObject -Server $Server -TargetPath $OUDisabledUserAccounts -Credential $Cred
+
+    
             }
         if($AccDisable2ndBatch)
             {
@@ -270,42 +229,16 @@ Function AccEnfPWChange()
         # - Run the script block for each string in the user-variable.
         foreach ($Entry in $Entries)
             {
-
-
             # - Get the user name-part in the loaded string.
             $usr = $null
             $Usr = ($Entry -split "&&&")[0]
 
-            # - Get the executing user-part in the loaded string.
-            $RunningUsr = $null
-            $RunningUsr = ($Entry -split "&&&")[1] 
+            # - Load the AD-user object into variable.
+            $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
 
-            # - Get the time executed-part in the loaded string.
-            $ExecTime = $null
-            $ExecTime = ($Entry -split "&&&")[2] 
-        
-            # - Load the AD-user of the running user.
-            $RunningADUsr = $null
-            $RunningADUsr = get-aduser -server $server -filter {userprincipalname -eq $RunningUsr}
-
-            # - Load the date of the input time-stamp into a variable.
-            $RealExecTime = $null
-            $RealExecTime = get-date $ExecTime
-
-        
-            # - Test that the running user exists and timestamp is valid. If so, run the script block.
-            If($RunningADUsr -and $RealExecTime)
-                {
-
-                # - Load the AD-user object into variable.
-                $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
-
-                # - Enforce password change on the user account.
-                $ADUsr | Set-aduser -ChangePasswordAtLogon $true -server $server -Credential $Cred
-
-                }
-
-
+            # - Enforce password change on the user account.
+            $ADUsr | Set-aduser -ChangePasswordAtLogon $true -server $server -Credential $Cred
+            
             }
         if($AccEnfPWChange2ndBatch)
             {
@@ -359,36 +292,12 @@ Function AccSetDate()
             # - Get the date-part in the loaded string.
             $ExpDate = $null
             $ExpDate = ($Entry -split "&&&")[1]
-
-            # - Get the executing user-part in the loaded string.
-            $RunningUsr = $null
-            $RunningUsr = ($Entry -split "&&&")[2] 
-
-            # - Get the time executed-part in the loaded string.
-            $ExecTime = $null
-            $ExecTime = ($Entry -split "&&&")[3] 
-
-            # - Load the AD-user of the running user.
-            $RunningADUsr = $null
-            $RunningADUsr = get-aduser -server $server -filter {userprincipalname -eq $RunningUsr}
-
-            # - Load the date of the input time-stamp into a variable.
-            $RealExecTime = $null
-            $RealExecTime = get-date $ExecTime
-
         
-            # - Test that the running user exists and timestamp is valid. If so, run the script block.
-            If($RunningADUsr -and $RealExecTime)
-                {
+            # - Load the AD-user object into variable.
+            $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
 
-                # - Load the AD-user object into variable.
-                $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
-
-                # - Set expiration-date on the user.
-                $ADUsr | Set-aduser -Server $server -AccountExpirationDate $ExpDate -Credential $cred
-
-                }
-
+            # - Set expiration-date on the user.
+            $ADUsr | Set-aduser -Server $server -AccountExpirationDate $ExpDate -Credential $cred
 
             }
         if($AccSetDate2ndBatch)
@@ -440,35 +349,12 @@ Function AccClearDate()
             # - Get the user name-part in the loaded string.
             $usr = $null
             $Usr = ($Entry -split "&&&")[0]
-        
-            # - Get the executing user-part in the loaded string.
-            $RunningUsr = $null
-            $RunningUsr = ($Entry -split "&&&")[1] 
+      
+            # - Load the AD-user object into variable.
+            $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
 
-            # - Get the time executed-part in the loaded string.
-            $ExecTime = $null
-            $ExecTime = ($Entry -split "&&&")[2] 
-
-            # - Load the AD-user of the running user.
-            $RunningADUsr = $null
-            $RunningADUsr = get-aduser -server $server -filter {userprincipalname -eq $RunningUsr}
-
-            # - Load the date of the input time-stamp into a variable.
-            $RealExecTime = $null
-            $RealExecTime = get-date $ExecTime
-
-        
-            # - Test that the running user exists and timestamp is valid. If so, run the script block.
-            If($RunningADUsr -and $RealExecTime)
-                {
-
-                # - Load the AD-user object into variable.
-                $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
-
-                # - Set expiration-date on the user.
-                $ADUsr | Clear-ADAccountExpiration -Server $server -Credential $cred
-
-                }
+            # - Set expiration-date on the user.
+            $ADUsr | Clear-ADAccountExpiration -Server $server -Credential $cred
 
             }
         if($AccClearDate2ndBatch)
@@ -519,35 +405,12 @@ Function AccUnlock()
             # - Get the user name-part in the loaded string.
             $usr = $null
             $Usr = ($Entry -split "&&&")[0]
-
-            # - Get the executing user-part in the loaded string.
-            $RunningUsr = $null
-            $RunningUsr = ($Entry -split "&&&")[1] 
-
-            # - Get the time executed-part in the loaded string.
-            $ExecTime = $null
-            $ExecTime = ($Entry -split "&&&")[2] 
-
-            # - Load the AD-user of the running user.
-            $RunningADUsr = $null
-            $RunningADUsr = get-aduser -server $server -filter {userprincipalname -eq $RunningUsr}
-
-            # - Load the date of the input time-stamp into a variable.
-            $RealExecTime = $null
-            $RealExecTime = get-date $ExecTime
-
         
-            # - Test that the running user exists and timestamp is valid. If so, run the script block.
-            If($RunningADUsr -and $RealExecTime)
-                {
+            # - Load the AD-user object into variable.
+            $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
 
-                # - Load the AD-user object into variable.
-                $ADUsr = get-aduser -filter {name -eq $usr} -server $server -Credential $Cred
-
-                # - Unlock the user account.
-                $ADUsr | Unlock-ADAccount -Server $server -Credential $Cred
-
-                }
+            # - Unlock the user account.
+            $ADUsr | Unlock-ADAccount -Server $server -Credential $Cred
 
             }
 
@@ -607,30 +470,12 @@ Function AccPWReset()
             $EnforceChange = $null
             $EnforceChange = ($Entry -split "&&&")[2] 
 
-            # - Get the executing user part in the loaded string.
-            $RunningUsr = $null
-            $RunningUsr = ($Entry -split "&&&")[3] 
 
-            # - Get the time-executed part in the loaded string.
-            $ExecTime = $null
-            $ExecTime = ($Entry -split "&&&")[4] 
+            # - Load the AD-user object into variable.
+            $ADUsr = get-aduser -filter {name -eq $usr} -server $server
 
-            # - Load the AD-user of the running user.
-            $RunningADUsr = $null
-            $RunningADUsr = get-aduser -server $server -filter {userprincipalname -eq $RunningUsr}
-
-            # - Load the date of the input time-stamp into a variable.
-            $RealExecTime = $null
-            $RealExecTime = get-date $ExecTime
-        
-            # - Test that the running user exists and timestamp is valid. If so, run the script block.
-            If($RunningADUsr -and $RealExecTime)
-                {
-                # - Load the AD-user object into variable.
-                $ADUsr = get-aduser -filter {name -eq $usr} -server $server
-
-                # - Reset the password on the user.
-                $ADUsr | Set-ADAccountPassword -Server $server -Reset -NewPassword (ConvertTo-SecureString $PWBAT -key $aes.key) -Credential $cred
+            # - Reset the password on the user.
+            $ADUsr | Set-ADAccountPassword -Server $server -Reset -NewPassword (ConvertTo-SecureString $PWBAT -key $aes.key) -Credential $cred
 
                 # - If the tag for enforcing password change is "Yes", run the script block that enforces user to change the password.
                 if($EnforceChange -eq "Yes")
@@ -699,50 +544,31 @@ Function AccEnable
             $EnforceChange = $null
             $EnforceChange = ($Entry -split "&&&")[2] 
 
-            # - Get the executing user part in the loaded string.
-            $RunningUsr = $null
-            $RunningUsr = ($Entry -split "&&&")[3] 
-
-            # - Get the time-executed part in the loaded string.
-            $ExecTime = $null
-            $ExecTime = ($Entry -split "&&&")[4] 
-
-            # - Load the AD-user of the running user.
-            $RunningADUsr = $null
-            $RunningADUsr = get-aduser -server $server -filter {userprincipalname -eq $RunningUsr}
-
-            # - Load the date of the input time-stamp into a variable.
-            $RealExecTime = $null
-            $RealExecTime = get-date $ExecTime
-        
-            # - Test that the running user exists and timestamp is valid. If so, run the script block.
-            If($RunningADUsr -and $RealExecTime)
+            # - Load the AD-user object into variable.
+            $ADUsr = get-aduser -filter {name -eq $usr} -server $server
+            # - Loop trough each entry of attributes to clear when enabling a user, and clear that attribute.
+            foreach($AttributeClear in $AttributeClearOnEnable)
                 {
-                # - Load the AD-user object into variable.
-                $ADUsr = get-aduser -filter {name -eq $usr} -server $server
-                # - Loop trough each entry of attributes to clear when enabling a user, and clear that attribute.
-                foreach($AttributeClear in $AttributeClearOnEnable)
-                    {
-                    $ADUsr | Set-ADUser -Server $Server -clear $AttributeClear -Credential $Cred
-                    }
-
-                # - Set the password on the user.
-                $ADUsr | Set-ADAccountPassword -Server $server -Reset -NewPassword (ConvertTo-SecureString $PWBAT -key $aes.key) -Credential $cred
-
-                # - Enable user and clear the description.
-                $ADUsr | Set-ADUser -Server $Server -Enabled $true -Credential $cred
-                $ADUsr | Set-ADUser -Server $Server -Clear {description} -Credential $cred
-                            
-                # - If the tag for enforcing password change is YES, run the script-block that enforces password change on the user.
-                if($EnforceChange -eq "Yes")
-                    {
-                    # - Enforce password change on the user account.
-                    $ADUsr | Set-aduser -ChangePasswordAtLogon $true -server $server -Credential $Cred
-                    }
-                # - Move the users to its home-OU.
-                $ADUsr | Move-ADObject -Server $Server -TargetPath $OUEnabledUserAccounts -Credential $Cred                
-
+                $ADUsr | Set-ADUser -Server $Server -clear $AttributeClear -Credential $Cred
                 }
+
+            # - Set the password on the user.
+            $ADUsr | Set-ADAccountPassword -Server $server -Reset -NewPassword (ConvertTo-SecureString $PWBAT -key $aes.key) -Credential $cred
+
+            # - Enable user and clear the description.
+            $ADUsr | Set-ADUser -Server $Server -Enabled $true -Credential $cred
+            $ADUsr | Set-ADUser -Server $Server -Clear {description} -Credential $cred
+
+            # - If the tag for enforcing password change is YES, run the script-block that enforces password change on the user.
+            if($EnforceChange -eq "Yes")
+                {
+                # - Enforce password change on the user account.
+                $ADUsr | Set-aduser -ChangePasswordAtLogon $true -server $server -Credential $Cred
+                }
+            # - Move the users to its home-OU.
+            $ADUsr | Move-ADObject -Server $Server -TargetPath $OUEnabledUserAccounts -Credential $Cred                
+
+  
             }
         if($AccEnable2ndBatch)
             {
