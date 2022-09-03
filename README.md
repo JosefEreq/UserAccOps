@@ -1,6 +1,6 @@
-### This repository is not maintained!
-
 ### Script app to perform operations on Active Directory accounts (on-prem) without granting admins required permissions. It's a simple file based ouput between app/back-end, secured with NTFS permissions. I built it for a RBAC-based AD where admins didn't have necessary permissions. Consits of app and back-end/batch script.
+
+#### This repository is not maintained!
 
 **The application and script has been tested in Powershell 4 and 5 on Windows Server 2012 R2/2016. It requires the Active Directory PS-module. You could publish it as a virtual app on a server with the module installed.**
 
