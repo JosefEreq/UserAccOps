@@ -1,4 +1,4 @@
-## AD User Account Operations
+## AD user account operations
 
 #### Script app to perform operations on Active Directory accounts (on-prem) without granting admins required permissions. It's a simple file based ouput between app/back-end, secured with NTFS permissions. I built it for a RBAC-based AD where admins didn't have necessary permissions. Consits of app and back-end/batch script.
 
